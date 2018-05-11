@@ -69,6 +69,15 @@
                     format: "png"
                 }).then(function (img) {
                     console.log(img);
+                    $.ajax({
+                        url: `https://stageinfocare.herokuapp.com/api/v1/users/set_user_image/1`,
+                        method: "post",
+                        data: {
+                            image: img
+                        }
+                    }).then(function(data) {
+                        console.log(data);
+                    });
                     // Send data to server
                 })
             }
