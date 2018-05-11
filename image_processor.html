@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image Processor</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.19.0.min.js"></script>   
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="croppie.css" />
+
+        <script src="croppie.js"></script>
+        <style>
+            body {
+                width: 100vw;
+                height: 100vw;
+                flex: 1;
+                vertical-align: middle;
+            }
+
+            .container {
+                margin-right: 15px;
+                margin-left: 15px;
+                vertical-align: middle;
+                height: 100%;
+                align-items: center;
+            }
+
+            .viewport {
+                margin-top: 50px;
+                width: 400px;
+                height: 400px;
+            }
+        </style>
+    </head>
+    <!-- Body -->
+    <body>
+        <div class="container">
+            <center>
+                <div class="viewport" id="croppie_container" />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input id="imageInput" type="file" onchange="setImage();">
+                    </div>
+                    <div class="col-sm-6">
+                        <button onclick="saveImage();">
+                            Guardar imagen con cambios
+                        </button>
+                    </div>
+                </div>
+                <br />
+            </center>
+        </div>
+        <script>
+            var basic = $('#croppie_container').croppie({
+                viewport: {
+                    width: 150,
+                    height: 150,
+                    type: 'circle'
+                }
+            });
+
+            function saveImage () {
+                basic.croppie('get');
+                basic.croppie('result', {
+                    type: "canvas",
+                    format: "png"
+                }).then(function (img) {
+                    console.log(img);
+                    // Send data to server
+                })
+            }
+
+            function setImage() {
+                var file = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+                
+                reader.onloadend = function () {
+                    basic.croppie('bind', {
+                        url: reader.result,
+                        pints: [77, 469, 280, 739]
+                    });
+                }
+                
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    basic.croppie('bind', {
+                        url: reader.result,
+                        pints: [77, 469, 280, 739]
+                    });
+                }
+            }
+        </script>
+    </body>
+    
+</html>
